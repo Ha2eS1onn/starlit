@@ -1,0 +1,222 @@
+[
+  {
+    "id": "Sirius",
+    "name": "天狼星",
+    "nameEn": "Sirius",
+    "ra": 6.752,
+    "dec": -16.716,
+    "dist": 8.6,
+    "mag": -1.46,
+    "spect": "A1V",
+    "constellation": "大犬座"
+  },
+  {
+    "id": "Canopus",
+    "name": "老人星",
+    "nameEn": "Canopus",
+    "ra": 6.399,
+    "dec": -52.695,
+    "dist": 95,
+    "mag": -0.74,
+    "spect": "F0Ib",
+    "constellation": "船底座"
+  },
+  {
+    "id": "Arcturus",
+    "name": "大角星",
+    "nameEn": "Arcturus",
+    "ra": 14.261,
+    "dec": 19.187,
+    "dist": 37,
+    "mag": -0.05,
+    "spect": "K1.5III",
+    "constellation": "牧夫座"
+  },
+  {
+    "id": "Vega",
+    "name": "织女星",
+    "nameEn": "Vega",
+    "ra": 18.616,
+    "dec": 38.783,
+    "dist": 25,
+    "mag": 0.03,
+    "spect": "A0V",
+    "constellation": "天琴座"
+  },
+  {
+    "id": "Capella",
+    "name": "五车二",
+    "nameEn": "Capella",
+    "ra": 5.278,
+    "dec": 45.998,
+    "dist": 43,
+    "mag": 0.08,
+    "spect": "G6III",
+    "constellation": "御夫座"
+  },
+  {
+    "id": "Rigel",
+    "name": "参宿七",
+    "nameEn": "Rigel",
+    "ra": 5.242,
+    "dec": -8.202,
+    "dist": 260,
+    "mag": 0.13,
+    "spect": "B8Ia",
+    "constellation": "猎户座"
+  },
+  {
+    "id": "Procyon",
+    "name": "南河三",
+    "nameEn": "Procyon",
+    "ra": 7.655,
+    "dec": 5.224,
+    "dist": 11,
+    "mag": 0.38,
+    "spect": "F5IV-V",
+    "constellation": "小犬座"
+  },
+  {
+    "id": "Betelgeuse",
+    "name": "参宿四",
+    "nameEn": "Betelgeuse",
+    "ra": 5.919,
+    "dec": 7.407,
+    "dist": 550,
+    "mag": 0.50,
+    "spect": "M1-2Ia",
+    "constellation": "猎户座"
+  },
+  {
+    "id": "Achernar",
+    "name": "水委一",
+    "nameEn": "Achernar",
+    "ra": 1.628,
+    "dec": -57.237,
+    "dist": 140,
+    "mag": 0.46,
+    "spect": "B6Vep",
+    "constellation": "波江座"
+  },
+  {
+    "id": "Hadar",
+    "name": "马腹一",
+    "nameEn": "Hadar",
+    "ra": 14.063,
+    "dec": -60.373,
+    "dist": 390,
+    "mag": 0.61,
+    "spect": "B1III",
+    "constellation": "半人马座"
+  },
+  {
+    "id": "Altair",
+    "name": "牛郎星",
+    "nameEn": "Altair",
+    "ra": 19.846,
+    "dec": 8.868,
+    "dist": 17,
+    "mag": 0.77,
+    "spect": "A7V",
+    "constellation": "天鹰座"
+  },
+  {
+    "id": "Acrux",
+    "name": "十字架二",
+    "nameEn": "Acrux",
+    "ra": 12.443,
+    "dec": -63.099,
+    "dist": 320,
+    "mag": 1.40,
+    "spect": "B0.5IV",
+    "constellation": "南十字座"
+  },
+  {
+    "id": "Aldebaran",
+    "name": "毕宿五",
+    "nameEn": "Aldebaran",
+    "ra": 4.599,
+    "dec": 16.509,
+    "dist": 65,
+    "mag": 0.85,
+    "spect": "K5III",
+    "constellation": "金牛座"
+  },
+  {
+    "id": "Antares",
+    "name": "心宿二",
+    "nameEn": "Antares",
+    "ra": 16.490,
+    "dec": -26.432,
+    "dist": 550,
+    "mag": 1.06,
+    "spect": "M1.5Iab",
+    "constellation": "天蝎座"
+  },
+  {
+    "id": "Spica",
+    "name": "角宿一",
+    "nameEn": "Spica",
+    "ra": 13.420,
+    "dec": -11.161,
+    "dist": 250,
+    "mag": 1.04,
+    "spect": "B1III",
+    "constellation": "室女座"
+  },
+  {
+    "id": "Pollux",
+    "name": "北河三",
+    "nameEn": "Pollux",
+    "ra": 7.755,
+    "dec": 28.026,
+    "dist": 34,
+    "mag": 1.14,
+    "spect": "K0III",
+    "constellation": "双子座"
+  },
+  {
+    "id": "Fomalhaut",
+    "name": "北落师门",
+    "nameEn": "Fomalhaut",
+    "ra": 22.961,
+    "dec": -29.622,
+    "dist": 25,
+    "mag": 1.16,
+    "spect": "A3V",
+    "constellation": "南鱼座"
+  },
+  {
+    "id": "Deneb",
+    "name": "天津四",
+    "nameEn": "Deneb",
+    "ra": 20.690,
+    "dec": 45.280,
+    "dist": 2600,
+    "mag": 1.25,
+    "spect": "A2Ia",
+    "constellation": "天鹅座"
+  },
+  {
+    "id": "Mimosa",
+    "name": "十字架三",
+    "nameEn": "Mimosa",
+    "ra": 12.795,
+    "dec": -59.689,
+    "dist": 280,
+    "mag": 1.25,
+    "spect": "B0.5III",
+    "constellation": "南十字座"
+  },
+  {
+    "id": "Regulus",
+    "name": "轩辕十四",
+    "nameEn": "Regulus",
+    "ra": 10.140,
+    "dec": 11.967,
+    "dist": 77,
+    "mag": 1.35,
+    "spect": "B7V",
+    "constellation": "狮子座"
+  }
+]

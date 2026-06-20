@@ -1,0 +1,412 @@
+{
+  "Sirius": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "射天狼",
+        "source": "苏轼《江城子·密州出猎》",
+        "quote": "会挽雕弓如满月，西北望，射天狼。",
+        "context": "天狼星在古代中国象征外敌与侵扰，「射天狼」表达报国之志。",
+        "era": "北宋"
+      },
+      {
+        "culture": "古埃及",
+        "title": "索提斯",
+        "source": "古埃及历法",
+        "context": "天狼星的偕日升标志尼罗河泛滥，是古埃及新年的开始。"
+      }
+    ]
+  },
+  "Vega": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "牛郎织女",
+        "source": "《古诗十九首》",
+        "quote": "迢迢牵牛星，皎皎河汉女。",
+        "context": "织女星与牛郎星隔银河相望，象征爱情与离别。",
+        "era": "汉代"
+      }
+    ]
+  },
+  "Arcturus": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "大角星",
+        "source": "司马迁《史记·天官书》",
+        "context": "大角星为二十八宿中东方苍龙七宿的角宿，是帝王之象。",
+        "era": "西汉"
+      }
+    ]
+  },
+  "Rigel": {
+    "entries": [
+      {
+        "culture": "希腊",
+        "title": "猎户之足",
+        "source": "希腊神话",
+        "context": "参宿七是猎户座的左脚，代表巨人猎人俄里翁。"
+      },
+      {
+        "culture": "中国",
+        "title": "参宿",
+        "source": "《步天歌》",
+        "context": "参宿为西方白虎七宿之末，主军事与狩猎。",
+        "era": "唐代"
+      }
+    ]
+  },
+  "Altair": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "河鼓二",
+        "source": "《尔雅》",
+        "quote": "河鼓谓之牵牛。",
+        "context": "牛郎星又名河鼓二，与织女星相对，七夕鹊桥相会的传说源此。",
+        "era": "先秦"
+      }
+    ]
+  },
+  "Canopus": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "南极老人",
+        "source": "《晋书·天文志》",
+        "context": "老人星位于天狼星以南，象征长寿与祥瑞，太平之世才可见。",
+        "era": "唐代"
+      },
+      {
+        "culture": "阿拉伯",
+        "title": "航海者",
+        "context": "阿拉伯水手称老人星为Suhayl，是印度洋航行的关键导航星。"
+      }
+    ]
+  },
+  "Capella": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "五车二",
+        "source": "《史记·天官书》",
+        "context": "五车星官象征帝王的车驾与储备，五车二为其主星。",
+        "era": "西汉"
+      },
+      {
+        "culture": "希腊",
+        "title": "阿玛尔忒亚",
+        "source": "希腊神话",
+        "context": "Capella在拉丁语中意为「小母羊」，象征哺育宙斯的山羊阿玛尔忒亚。"
+      }
+    ]
+  },
+  "Procyon": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "南河三",
+        "source": "《史记·天官书》",
+        "context": "南河星官位于井宿之南，南河三为其第三星。",
+        "era": "西汉"
+      },
+      {
+        "culture": "古埃及",
+        "title": "天狼前导",
+        "context": "南河三在天狼星升起前约40分钟出现，被视为天狼星的先导。"
+      }
+    ]
+  },
+  "Betelgeuse": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "参宿四",
+        "source": "《步天歌》",
+        "context": "参宿为西方白虎七宿，参宿四位于猎户座左肩。",
+        "era": "唐代"
+      },
+      {
+        "culture": "希腊",
+        "title": "猎户之肩",
+        "source": "希腊神话",
+        "context": "Betelgeuse意为「猎人的肩膀」，代表巨人猎人俄里翁的左肩。"
+      }
+    ]
+  },
+  "Aldebaran": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "毕宿五",
+        "source": "《步天歌》",
+        "context": "毕宿为西方白虎七宿之第二宿，形似捕鸟网，毕宿五为其主星。",
+        "era": "唐代"
+      },
+      {
+        "culture": "阿拉伯",
+        "title": "追随者",
+        "context": "Aldebaran源自阿拉伯语al-Dabarān，意为「追随者」，因为它追随昴星团升起。"
+      }
+    ]
+  },
+  "Antares": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "大火",
+        "source": "《诗经·豳风》",
+        "quote": "七月流火，九月授衣。",
+        "context": "心宿二古称大火，其昏见标志秋季的开始，是古代授时的重要星象。",
+        "era": "周代"
+      },
+      {
+        "culture": "希腊",
+        "title": "战神对手",
+        "source": "希腊天文学",
+        "context": "Antares意为「反战神」，因其红色光芒与火星（Ares）相似而得名。"
+      }
+    ]
+  },
+  "Spica": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "角宿一",
+        "source": "《史记·天官书》",
+        "context": "角宿为二十八宿之首，象征龙角，角宿一是东方苍龙的第一星。",
+        "era": "西汉"
+      },
+      {
+        "culture": "希腊",
+        "title": "麦穗",
+        "source": "希腊神话",
+        "context": "Spica在拉丁语中意为「麦穗」，代表农业女神德墨忒尔手中的麦穗。"
+      }
+    ]
+  },
+  "Pollux": {
+    "entries": [
+      {
+        "culture": "希腊",
+        "title": "双子兄弟",
+        "source": "希腊神话",
+        "context": "Pollux是双子座中较亮的一颗，代表宙斯之子波鲁克斯，与卡斯托尔兄弟情深。"
+      }
+    ]
+  },
+  "Fomalhaut": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "北落师门",
+        "source": "《晋书·天文志》",
+        "context": "北落师门星官位于羽林军之北，象征北方边塞的营门。",
+        "era": "唐代"
+      },
+      {
+        "culture": "阿拉伯",
+        "title": "南鱼之口",
+        "source": "阿拉伯天文学",
+        "context": "Fomalhaut源自阿拉伯语Fum al-Hut，意为「鱼嘴」，指南鱼座的嘴巴。"
+      }
+    ]
+  },
+  "Deneb": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "天津四",
+        "source": "《步天歌》",
+        "context": "天津星官横跨银河，象征天河上的渡口，天津四为其最亮星。",
+        "era": "唐代"
+      },
+      {
+        "culture": "阿拉伯",
+        "title": "尾巴",
+        "context": "Deneb源自阿拉伯语dhanab，意为「尾巴」，指天鹅座的尾部。"
+      }
+    ]
+  },
+  "Regulus": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "轩辕十四",
+        "source": "《史记·天官书》",
+        "context": "轩辕星官象征黄帝的车驾与旗帜，轩辕十四为其中最亮者。",
+        "era": "西汉"
+      },
+      {
+        "culture": "巴比伦",
+        "title": "王者之星",
+        "source": "巴比伦天文学",
+        "context": "巴比伦人将Regulus称为「王者之星」，是黄道四大王者星之一。"
+      }
+    ]
+  },
+  "Acrux": {
+    "entries": [
+      {
+        "culture": "澳大利亚原住民",
+        "title": "南十字",
+        "context": "南十字座在澳大利亚原住民文化中是重要天象标记，指引季节与方向。"
+      },
+      {
+        "culture": "西方",
+        "title": "南天航标",
+        "context": "南十字座自大航海时代起成为南半球最重要的导航星座。"
+      }
+    ]
+  },
+  "Polaris": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "北极星",
+        "source": "《史记·天官书》",
+        "context": "北极星为天帝之居所，众星拱之，在星象学中象征皇权与中心。",
+        "era": "西汉"
+      },
+      {
+        "culture": "希腊",
+        "title": "腓尼基人导航",
+        "source": "古希腊航海",
+        "context": "北极星是北半球最重要的导航星，古人以其固定位置辨别方向。"
+      }
+    ]
+  },
+  "Castor": {
+    "entries": [
+      {
+        "culture": "希腊",
+        "title": "卡斯托爾",
+        "source": "希腊神话",
+        "context": "卡斯托尔是双子座中较暗的一颗，代表凡人兄弟卡斯托尔，与波鲁克斯手足情深。"
+      }
+    ]
+  },
+  "Bellatrix": {
+    "entries": [
+      {
+        "culture": "拉丁",
+        "title": "女战士",
+        "source": "文艺复兴天文学",
+        "context": "Bellatrix在拉丁语中意为「女战士」，她是猎户座的左肩星。"
+      }
+    ]
+  },
+  "Achernar": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "河之尾",
+        "source": "阿拉伯天文学",
+        "context": "Achernar源自阿拉伯语Ākhir an-Nahr，意为「河流的尽头」，是波江座的最南端。"
+      }
+    ]
+  },
+  "Alnilam": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "珍珠项链",
+        "source": "阿拉伯天文学",
+        "context": "Alnilam、Alnitak和Mintaka构成猎户座的腰带，阿拉伯人称之为「珍珠项链」。"
+      }
+    ]
+  },
+  "Alnitak": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "参宿一",
+        "source": "《步天歌》",
+        "context": "参宿一为猎户座腰带三星之末，与参宿二、三并称「参宿腰带」。",
+        "era": "唐代"
+      }
+    ]
+  },
+  "Mimosa": {
+    "entries": [
+      {
+        "culture": "西方",
+        "title": "南十字第二亮星",
+        "context": "Mimosa又称十字架三，是南十字座第二亮星，与Acrux共同指引南方。"
+      }
+    ]
+  },
+  "Hadar": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "马腹一",
+        "context": "马腹一为半人马座主星，位于半人马腹部，在南方夜空中极为醒目。"
+      }
+    ]
+  },
+  "Dubhe": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "天枢",
+        "source": "《史记·天官书》",
+        "context": "天枢为北斗七星之首，象征天帝的权柄与枢纽。",
+        "era": "西汉"
+      }
+    ]
+  },
+  "Alkaid": {
+    "entries": [
+      {
+        "culture": "中国",
+        "title": "摇光",
+        "source": "《史记·天官书》",
+        "context": "摇光为北斗七星之末，象征天帝的剑柄。",
+        "era": "西汉"
+      }
+    ]
+  },
+  "Mizar": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "视力测试",
+        "source": "阿拉伯天文学",
+        "context": "开阳星（Mizar）旁有一暗伴星Alcor，阿拉伯人用其测试视力。",
+        "era": "中世纪"
+      }
+    ]
+  },
+  "Elnath": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "撞击者",
+        "source": "阿拉伯天文学",
+        "context": "El Nath源自阿拉伯语an-naṭḥ，意为「（公羊的）撞击」，位于金牛座的北牛角尖。"
+      }
+    ]
+  },
+  "Denebola": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "狮尾",
+        "source": "阿拉伯天文学",
+        "context": "Denebola源自阿拉伯语dhanab al-asad，意为「狮子的尾巴」。"
+      }
+    ]
+  },
+  "Algieba": {
+    "entries": [
+      {
+        "culture": "阿拉伯",
+        "title": "额头",
+        "source": "阿拉伯天文学",
+        "context": "Algieba源自阿拉伯语al-jabhah，意为「额头」，代表狮子座的头部。"
+      }
+    ]
+  }
+}
