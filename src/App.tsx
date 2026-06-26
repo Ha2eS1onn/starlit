@@ -6,7 +6,7 @@ import VolumeControl from './components/VolumeControl'
 import { useStarStore } from './store/useStarStore'
 import './App.css'
 
-/** HUD：左下角显示实时速度与灵敏度 */
+/** HUD：左下角显示实时速度与灵敏度（桌面端显示） */
 function FlightHUD() {
   const flightSpeed = useStarStore((s) => s.flightSpeed)
   const flightMultiplier = useStarStore((s) => s.flightMultiplier)
@@ -14,6 +14,7 @@ function FlightHUD() {
 
   return (
     <div
+      className="hud-desktop"
       style={{
         position: 'fixed',
         bottom: 24,
@@ -39,10 +40,8 @@ function FlightHUD() {
   )
 }
 
-/** 键位操作提示：右下角（桌面端显示键盘/鼠标，移动端显示触控） */
+/** 键位操作提示：右下角（通过 CSS @media 切换桌面/移动端文案） */
 function ControlsHint() {
-  const isTouch = typeof window !== 'undefined' && 'ontouchstart' in window
-
   return (
     <div
       style={{
@@ -50,7 +49,7 @@ function ControlsHint() {
         bottom: 24,
         right: 24,
         color: 'rgba(148, 163, 184, 0.5)',
-        fontSize: isTouch ? 9 : 10,
+        fontSize: 10,
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
         letterSpacing: '0.3px',
@@ -62,11 +61,16 @@ function ControlsHint() {
         textAlign: 'right',
       }}
     >
-      {isTouch ? (
-        <>单指滑动旋转 · 双指捏合飞行<br />点击星点查看详情</>
-      ) : (
-        <>WASD 飞行 · 拖拽转向 · 滚轮调速<br />点击星点查看 · 悬停显示名称</>
-      )}
+      {/* 桌面端提示 */}
+      <div className="hint-desktop">
+        WASD 飞行 · 拖拽转向 · 滚轮调速<br />
+        点击星点查看 · 悬停显示名称
+      </div>
+      {/* 移动端提示 */}
+      <div className="hint-mobile" style={{ fontSize: 9 }}>
+        单指滑动旋转 · 双指捏合飞行<br />
+        点击星点查看详情
+      </div>
     </div>
   )
 }

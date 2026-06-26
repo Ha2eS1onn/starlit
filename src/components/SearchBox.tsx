@@ -100,21 +100,17 @@ export default function SearchBox() {
     }
   }, [])
 
-  /** 检测是否为触控设备（用于响应式宽度） */
-  const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
-
   if (!starsLoaded) return null
 
   return (
     <div
+      className="search-box"
       style={{
         position: 'fixed',
         top: 24,
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 300,
-        width: isTouchDevice ? '90vw' : 340,
-        maxWidth: 400,
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
       }}

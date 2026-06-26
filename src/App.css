@@ -26,3 +26,40 @@ body {
   width: 100%;
   height: 100%;
 }
+
+/* ---- 桌面端默认样式 ---- */
+.search-box {
+  width: 340px;
+}
+
+.hint-desktop {
+  display: block;
+}
+
+.hint-mobile {
+  display: none;
+}
+
+.hud-desktop {
+  display: block;
+}
+
+/* ---- 移动端样式（覆盖 iPad 竖屏 810px / iPad mini 744px） ---- */
+@media (max-width: 900px) {
+  .search-box {
+    width: 90vw;
+    max-width: 400px;
+  }
+
+  .hint-desktop {
+    display: none;
+  }
+
+  .hint-mobile {
+    display: block;
+  }
+
+  .hud-desktop {
+    display: none;
+  }
+}

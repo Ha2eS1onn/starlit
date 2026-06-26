@@ -19,8 +19,8 @@
   box-sizing: border-box;
 }
 
-/* 移动端：底部抽屉面板 */
-@media (max-width: 768px) {
+/* 移动端：底部抽屉面板（覆盖 iPad 竖屏 810px / iPad mini 744px） */
+@media (max-width: 900px) {
   .panel {
     top: auto;
     bottom: 0;
