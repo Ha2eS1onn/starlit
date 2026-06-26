@@ -7,6 +7,9 @@ import { useStarStore } from '../store/useStarStore'
 /** 固定观察距离：相机停在星点前方 FOCUS_DISTANCE 单位处 */
 const FOCUS_DISTANCE = 6
 
+/** 触控灵敏度倍率（远高于鼠标，因手指滑动精度低） */
+const TOUCH_SENSITIVITY = 0.018
+
 /** 自定义 Hook：诗云式自由飞行相机控制（支持鼠标 + 触控） */
 export default function useFlightControls() {
   const { gl, camera } = useThree()
@@ -56,10 +59,13 @@ export default function useFlightControls() {
   const setCameraSensitivity = useStarStore((s) => s.setCameraSensitivity)
 
   // ---- 触控手势状态 ----
-  const touchStartRef = useRef({ x: 0, y: 0, t: 0 })
+  const prevTouchPosRef = useRef({ x: 0, y: 0 })
   const prevPinchDistRef = useRef(0)
   /** 是否正在双指触控（供外部跳过星点检测） */
   const isPinchingRef = useRef(false)
+  /** 触控惯性速度（弧度/秒） */
+  const touchInertia = useRef({ yaw: 0, pitch: 0 })
+  const lastTouchTime = useRef(0)
 
   // ---- 计算方向向量 ----
   const updateDirection = () => {
@@ -265,10 +271,13 @@ export default function useFlightControls() {
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
         const t = e.touches[0]
-        touchStartRef.current = { x: t.clientX, y: t.clientY, t: performance.now() }
+        prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
+        lastTouchTime.current = performance.now()
+        touchInertia.current = { yaw: 0, pitch: 0 }
       }
       if (e.touches.length === 2) {
         isPinchingRef.current = true
+        touchInertia.current = { yaw: 0, pitch: 0 }
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
         prevPinchDistRef.current = Math.sqrt(dx * dx + dy * dy)
@@ -276,22 +285,30 @@ export default function useFlightControls() {
     }
 
     const onTouchMove = (e: TouchEvent) => {
-      // 单指滑动 → 旋转视角
+      // 单指滑动 → 旋转视角（增量模式，与鼠标拖拽一致）
       if (e.touches.length === 1 && !isFlyingRef.current) {
+        e.preventDefault()
         const t = e.touches[0]
-        const dx = t.clientX - touchStartRef.current.x
-        const dy = t.clientY - touchStartRef.current.y
+        const dx = t.clientX - prevTouchPosRef.current.x
+        const dy = t.clientY - prevTouchPosRef.current.y
 
-        if (Math.abs(dx) + Math.abs(dy) >= 3) {
-          e.preventDefault()
-          yaw.current -= dx * sensitivityRef.current * 2
-          pitch.current -= dy * sensitivityRef.current * 2
+        if (Math.abs(dx) + Math.abs(dy) >= 1) {
+          const now = performance.now()
+          const dt = Math.max(now - lastTouchTime.current, 1) / 1000
+          lastTouchTime.current = now
+          // 计算瞬时速度用于惯性
+          touchInertia.current = {
+            yaw: -dx * TOUCH_SENSITIVITY / dt,
+            pitch: -dy * TOUCH_SENSITIVITY / dt,
+          }
+          yaw.current -= dx * TOUCH_SENSITIVITY
+          pitch.current -= dy * TOUCH_SENSITIVITY
           pitch.current = Math.max(
             -85 * (Math.PI / 180),
             Math.min(85 * (Math.PI / 180), pitch.current),
           )
         }
-        touchStartRef.current = { x: t.clientX, y: t.clientY, t: touchStartRef.current.t }
+        prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
       }
 
       // 双指捏合 → 前后飞行
@@ -303,7 +320,6 @@ export default function useFlightControls() {
         const deltaDist = prevPinchDistRef.current - dist
         prevPinchDistRef.current = dist
 
-        // 沿当前朝向移动相机（捏合后退，扩张前进）
         position.current.addScaledVector(direction.current, deltaDist * 0.5)
       }
     }
@@ -337,7 +353,7 @@ export default function useFlightControls() {
     updateDirection()
   }, [])
 
-  // ---- 每帧更新（自由飞行） ----
+  // ---- 每帧更新（自由飞行 + 触控惯性） ----
   useFrame((state, delta) => {
     if (isFlyingRef.current) return
 
@@ -365,6 +381,20 @@ export default function useFlightControls() {
     }
 
     position.current.addScaledVector(velocity.current, dt * speedMultiplier.current)
+
+    // 触控惯性：在 useFrame 中逐帧衰减，产生平滑滑动跟随感
+    const inertia = touchInertia.current
+    if (Math.abs(inertia.yaw) > 0.001 || Math.abs(inertia.pitch) > 0.001) {
+      yaw.current += inertia.yaw * dt
+      pitch.current += inertia.pitch * dt
+      pitch.current = Math.max(
+        -85 * (Math.PI / 180),
+        Math.min(85 * (Math.PI / 180), pitch.current),
+      )
+      // 惯性逐帧衰减
+      inertia.yaw *= 0.85
+      inertia.pitch *= 0.85
+    }
 
     updateDirection()
     applyCamera(cam)
