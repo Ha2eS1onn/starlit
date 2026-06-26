@@ -1,12 +1,7 @@
 /**
  * 从 HYG v4.1 CSV 构建 stars-full.json
  * 
- * 过滤规则：
- * - Phase 1: mag < 4.0 → ~500 颗
- * - Phase 2: mag < 5.5 → ~3000 颗
- * - Phase 3: mag < 6.5 → ~9000 颗
- *
- * 当前 filter: mag < 6.5 (最终)
+ * 全量输出：仅过滤掉太阳 (id=0) 及无星等/无坐标的行
  */
 
 const fs = require('fs');
@@ -60,7 +55,7 @@ function parseCsvLine(line) {
 
 // ---- 主流程 ----
 function build() {
-  const csvPath = path.join(__dirname, '..', 'public', 'hygdata_v3.csv');
+  const csvPath = path.join(__dirname, 'hygdata_v3.csv');
   const outputPath = path.join(__dirname, '..', 'public', 'stars-full.json');
 
   console.log('Reading CSV:', csvPath);
@@ -84,12 +79,9 @@ function build() {
   };
   console.log('Field indices:', idx);
 
-  // 过滤星等 < 6.5
-  const MAG_LIMIT = 6.5;
   // 去掉太阳 (id=0)
   const stars = [];
   let skippedNoMag = 0;
-  let skippedBright = 0;
   let skippedNoCoord = 0;
 
   for (let i = 1; i < lines.length; i++) {
@@ -104,7 +96,6 @@ function build() {
     if (!magStr || magStr === '') { skippedNoMag++; continue; }
     const mag = parseFloat(magStr);
     if (isNaN(mag)) { skippedNoMag++; continue; }
-    if (mag > MAG_LIMIT) { skippedBright++; continue; }
 
     const ra = parseFloat(cols[idx.ra]);
     const dec = parseFloat(cols[idx.dec]);
@@ -153,7 +144,6 @@ function build() {
   }
 
   console.log(`\n过滤统计:`);
-  console.log(`  mag > ${MAG_LIMIT}: ${skippedBright}`);
   console.log(`  无 mag 数据: ${skippedNoMag}`);
   console.log(`  无坐标: ${skippedNoCoord}`);
   console.log(`  输出星数: ${stars.length}`);
