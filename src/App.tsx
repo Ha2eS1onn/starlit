@@ -3,6 +3,7 @@ import StarPanel from './components/StarPanel'
 import LoadingScreen from './components/LoadingScreen'
 import SearchBox from './components/SearchBox'
 import VolumeControl from './components/VolumeControl'
+import VirtualJoystick from './components/VirtualJoystick'
 import { useStarStore } from './store/useStarStore'
 import './App.css'
 
@@ -68,7 +69,7 @@ function ControlsHint() {
       </div>
       {/* 移动端提示 */}
       <div className="hint-mobile" style={{ fontSize: 9 }}>
-        单指滑动旋转 · 双指捏合飞行<br />
+        单指滑动旋转 · 摇杆飞行<br />
         点击星点查看详情
       </div>
     </div>
@@ -89,6 +90,7 @@ function App() {
       {selectedStar && <StarPanel />}
       <FlightHUD />
       <VolumeControl />
+      <VirtualJoystick />
       <ControlsHint />
     </div>
   )

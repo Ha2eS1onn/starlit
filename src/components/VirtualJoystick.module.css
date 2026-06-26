@@ -1,0 +1,50 @@
+/* 虚拟摇杆 — 移动端飞行控制 */
+
+.container {
+  position: fixed;
+  bottom: 60px;
+  left: 40px;
+  z-index: 300;
+  /* 移动端默认隐藏，桌面端也隐藏 */
+  display: none;
+}
+
+/* 底座：半透明圆形 */
+.base {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  position: relative;
+}
+
+/* 拇指：内部小圆 */
+.thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  transition: background 0.15s ease;
+  will-change: transform;
+}
+
+/* 拖拽时拇指高亮 */
+.base:active .thumb {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* 仅移动端显示（覆盖 iPad 竖屏 810px / iPad mini 744px） */
+@media (max-width: 900px) {
+  .container {
+    display: block;
+  }
+}

@@ -3,6 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { useStarStore } from '../store/useStarStore'
+import { joystickInput } from '../utils/joystickInput'
 
 /** 固定观察距离：相机停在星点前方 FOCUS_DISTANCE 单位处 */
 const FOCUS_DISTANCE = 6
@@ -60,9 +61,6 @@ export default function useFlightControls() {
 
   // ---- 触控手势状态 ----
   const prevTouchPosRef = useRef({ x: 0, y: 0 })
-  const prevPinchDistRef = useRef(0)
-  /** 是否正在双指触控（供外部跳过星点检测） */
-  const isPinchingRef = useRef(false)
 
   // ---- 计算方向向量 ----
   const updateDirection = () => {
@@ -261,7 +259,7 @@ export default function useFlightControls() {
     }
   }, [gl])
 
-  // ---- 触控手势（移动端） ----
+  // ---- 触控手势（移动端：仅处理单指旋转，摇杆由 VirtualJoystick 组件处理） ----
   useEffect(() => {
     const domElement = gl.domElement
 
@@ -270,16 +268,9 @@ export default function useFlightControls() {
         const t = e.touches[0]
         prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
       }
-      if (e.touches.length === 2) {
-        isPinchingRef.current = true
-        const dx = e.touches[0].clientX - e.touches[1].clientX
-        const dy = e.touches[0].clientY - e.touches[1].clientY
-        prevPinchDistRef.current = Math.sqrt(dx * dx + dy * dy)
-      }
     }
 
     const onTouchMove = (e: TouchEvent) => {
-      // 单指滑动 → 旋转视角（增量模式，与鼠标拖拽一致）
       if (e.touches.length === 1 && !isFlyingRef.current) {
         e.preventDefault()
         const t = e.touches[0]
@@ -296,40 +287,14 @@ export default function useFlightControls() {
         }
         prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
       }
-
-      // 双指捏合 → 前后飞行（低系数 + 钳制防跳跃）
-      if (e.touches.length === 2) {
-        e.preventDefault()
-        const dx = e.touches[0].clientX - e.touches[1].clientX
-        const dy = e.touches[0].clientY - e.touches[1].clientY
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        const rawDelta = prevPinchDistRef.current - dist
-        prevPinchDistRef.current = dist
-
-        // 钳制单帧最大变化，防止手指抬起/放下时的突变
-        const clampedDelta = Math.max(-50, Math.min(50, rawDelta))
-        // 取反：捏合（dist 变小，rawDelta > 0）= 后退
-        position.current.addScaledVector(direction.current, -clampedDelta * 0.08)
-      }
-    }
-
-    const onTouchEnd = (_e: TouchEvent) => {
-      if (_e.touches.length === 0) {
-        isPinchingRef.current = false
-      }
-      if (_e.touches.length < 2) {
-        isPinchingRef.current = false
-      }
     }
 
     domElement.addEventListener('touchstart', onTouchStart, { passive: true })
     domElement.addEventListener('touchmove', onTouchMove, { passive: false })
-    domElement.addEventListener('touchend', onTouchEnd, { passive: true })
 
     return () => {
       domElement.removeEventListener('touchstart', onTouchStart)
       domElement.removeEventListener('touchmove', onTouchMove)
-      domElement.removeEventListener('touchend', onTouchEnd)
     }
   }, [gl])
 
@@ -342,7 +307,7 @@ export default function useFlightControls() {
     updateDirection()
   }, [])
 
-  // ---- 每帧更新（自由飞行 + 触控惯性） ----
+  // ---- 每帧更新（自由飞行 + 摇杆输入） ----
   useFrame((state, delta) => {
     if (isFlyingRef.current) return
 
@@ -360,6 +325,14 @@ export default function useFlightControls() {
     }
     if (keys.current['d']) {
       velocity.current.addScaledVector(right.current, ACCELERATION * dt)
+    }
+
+    // 虚拟摇杆 → 加速度（移动端替代 WASD）
+    const jx = joystickInput.x
+    const jy = joystickInput.y
+    if (Math.abs(jx) > 0.1 || Math.abs(jy) > 0.1) {
+      velocity.current.addScaledVector(direction.current, jy * ACCELERATION * dt)
+      velocity.current.addScaledVector(right.current, jx * ACCELERATION * dt)
     }
 
     velocity.current.multiplyScalar(1 - FRICTION)
