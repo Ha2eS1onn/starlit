@@ -19,6 +19,32 @@
   box-sizing: border-box;
 }
 
+/* 移动端：底部抽屉面板 */
+@media (max-width: 768px) {
+  .panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+    border-left: none;
+    border-top: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .panel__name {
+    font-size: 20px;
+  }
+
+  .panel__data {
+    gap: 12px;
+  }
+}
+
 .panel__header {
   display: flex;
   justify-content: space-between;

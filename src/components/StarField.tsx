@@ -136,6 +136,9 @@ export default function StarField() {
   // 屏幕投影检测：将 3D 星点投影到屏幕坐标，计算与鼠标的像素距离
   const screenVec = new THREE.Vector3()
   const MAX_PROJECT_DIST = 800
+  /** 移动端触控命中阈值比鼠标大 */
+  const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window
+  const PIXEL_THRESHOLD = isTouchDevice ? 60 : 15
 
   const detectStar = useCallback(
     (clientX: number, clientY: number) => {
@@ -179,7 +182,6 @@ export default function StarField() {
         }
       }
 
-      const PIXEL_THRESHOLD = 15
       const prevIdx = hoveredIdxRef.current
       if (closestIdx >= 0 && minPixels < PIXEL_THRESHOLD) {
         if (prevIdx !== closestIdx) {

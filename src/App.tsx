@@ -39,8 +39,10 @@ function FlightHUD() {
   )
 }
 
-/** 键位操作提示：右下角 */
+/** 键位操作提示：右下角（桌面端显示键盘/鼠标，移动端显示触控） */
 function ControlsHint() {
+  const isTouch = typeof window !== 'undefined' && 'ontouchstart' in window
+
   return (
     <div
       style={{
@@ -48,7 +50,7 @@ function ControlsHint() {
         bottom: 24,
         right: 24,
         color: 'rgba(148, 163, 184, 0.5)',
-        fontSize: 10,
+        fontSize: isTouch ? 9 : 10,
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
         letterSpacing: '0.3px',
@@ -60,8 +62,11 @@ function ControlsHint() {
         textAlign: 'right',
       }}
     >
-      WASD 飞行 · 拖拽转向 · 滚轮调速<br />
-      点击星点查看 · 悬停显示名称
+      {isTouch ? (
+        <>单指滑动旋转 · 双指捏合飞行<br />点击星点查看详情</>
+      ) : (
+        <>WASD 飞行 · 拖拽转向 · 滚轮调速<br />点击星点查看 · 悬停显示名称</>
+      )}
     </div>
   )
 }

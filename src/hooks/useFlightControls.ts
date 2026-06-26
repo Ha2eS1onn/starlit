@@ -7,7 +7,7 @@ import { useStarStore } from '../store/useStarStore'
 /** 固定观察距离：相机停在星点前方 FOCUS_DISTANCE 单位处 */
 const FOCUS_DISTANCE = 6
 
-/** 自定义 Hook：诗云式自由飞行相机控制 */
+/** 自定义 Hook：诗云式自由飞行相机控制（支持鼠标 + 触控） */
 export default function useFlightControls() {
   const { gl, camera } = useThree()
   const setFlightInfo = useStarStore((s) => s.setFlightInfo)
@@ -15,15 +15,13 @@ export default function useFlightControls() {
   const setCameraTarget = useStarStore((s) => s.setCameraTarget)
 
   // ---- 内部状态（ref，不触发重渲染） ----
-  // 太阳系中心视角：置身星海
   const position = useRef(new THREE.Vector3(0, 0, 10))
   const velocity = useRef(new THREE.Vector3(0, 0, 0))
   const speedMultiplier = useRef(1.0)
 
   // 视角欧拉角（弧度）
-  // 初始朝向：平视任意方向
-  const yaw = useRef(0) // 水平旋转
-  const pitch = useRef(0) // 垂直旋转，平视
+  const yaw = useRef(0)
+  const pitch = useRef(0)
 
   // 键盘状态
   const keys = useRef<Record<string, boolean>>({})
@@ -44,11 +42,10 @@ export default function useFlightControls() {
 
   // 物理参数
   const FRICTION = 0.03
-  // FOV 45 视野收窄后，提高加速度补偿飞行手感
   const ACCELERATION = 120
   const SCROLL_FACTOR = 1.5
 
-  // 灵敏度 ref（从 localStorage 初始化，不触发重渲染）
+  // 灵敏度 ref
   const DEFAULT_SENSITIVITY = 0.006
   const saved = typeof window !== 'undefined'
     ? localStorage.getItem('starlit-camera-sensitivity')
@@ -57,6 +54,12 @@ export default function useFlightControls() {
     saved ? parseFloat(saved) : DEFAULT_SENSITIVITY,
   )
   const setCameraSensitivity = useStarStore((s) => s.setCameraSensitivity)
+
+  // ---- 触控手势状态 ----
+  const touchStartRef = useRef({ x: 0, y: 0, t: 0 })
+  const prevPinchDistRef = useRef(0)
+  /** 是否正在双指触控（供外部跳过星点检测） */
+  const isPinchingRef = useRef(false)
 
   // ---- 计算方向向量 ----
   const updateDirection = () => {
@@ -81,11 +84,9 @@ export default function useFlightControls() {
   }
 
   // ---- GSAP 飞向目标（点击星点时调用） ----
-  // 使用 quaternion slerp 替代 lookAt，避免与自由飞行方向系统冲突
   useEffect(() => {
     if (!cameraTarget) return
 
-    // 标记飞行中，禁止 useFrame
     isFlyingRef.current = 1
     velocity.current.set(0, 0, 0)
 
@@ -95,17 +96,11 @@ export default function useFlightControls() {
       cameraTarget.z,
     )
 
-    // ---- 记录起止 quaternion ----
     const startQuat = camera.quaternion.clone()
-
-    // 临时 lookAt 计算目标朝向
     camera.lookAt(starPos)
     const endQuat = camera.quaternion.clone()
-
-    // 恢复
     camera.quaternion.copy(startQuat)
 
-    // ---- 计算停靠点：从星点到相机的方向 × FOCUS_DISTANCE ----
     const toStar = starPos.clone().sub(camera.position).normalize()
     const targetPos = starPos.clone().sub(toStar.multiplyScalar(FOCUS_DISTANCE))
 
@@ -119,16 +114,13 @@ export default function useFlightControls() {
       ease: 'power1.out',
       onUpdate: () => {
         const t = tween.progress()
-        // quaternion slerp：不触碰 lookAt/direction/yaw/pitch
         qTemp.slerpQuaternions(startQuat, endQuat, t)
         camera.quaternion.copy(qTemp)
       },
       onComplete: () => {
-        // 精确对齐
         camera.position.copy(targetPos)
         camera.quaternion.copy(endQuat)
 
-        // 从相机反向同步 direction/yaw/pitch
         const worldDir = new THREE.Vector3()
         camera.getWorldDirection(worldDir)
         direction.current.copy(worldDir)
@@ -139,13 +131,11 @@ export default function useFlightControls() {
         )
         updateDirection()
 
-        // 释放门控
         isFlyingRef.current = 0
         setCameraTarget(null)
       },
     })
 
-    // React 18 StrictMode 清理
     return () => {
       tween.kill()
       isFlyingRef.current = 0
@@ -158,7 +148,6 @@ export default function useFlightControls() {
       keys.current[e.key.toLowerCase()] = true
 
       if (e.key.toLowerCase() === 'r') {
-        // R 键重置到太阳系中心视角
         position.current.set(0, 0, 10)
         velocity.current.set(0, 0, 0)
         yaw.current = 0
@@ -166,23 +155,16 @@ export default function useFlightControls() {
         updateDirection()
       }
 
-      // [ 降低灵敏度 / ] 提高灵敏度
       if (e.key === '[') {
         const prev = sensitivityRef.current
         sensitivityRef.current = Math.max(0.001, prev * 0.8)
-        localStorage.setItem(
-          'starlit-camera-sensitivity',
-          String(sensitivityRef.current),
-        )
+        localStorage.setItem('starlit-camera-sensitivity', String(sensitivityRef.current))
         setCameraSensitivity(sensitivityRef.current)
       }
       if (e.key === ']') {
         const prev = sensitivityRef.current
         sensitivityRef.current = Math.min(0.1, prev * 1.25)
-        localStorage.setItem(
-          'starlit-camera-sensitivity',
-          String(sensitivityRef.current),
-        )
+        localStorage.setItem('starlit-camera-sensitivity', String(sensitivityRef.current))
         setCameraSensitivity(sensitivityRef.current)
       }
     }
@@ -198,7 +180,7 @@ export default function useFlightControls() {
     }
   }, [setCameraSensitivity])
 
-  // ---- 鼠标交互（通过 gl.domElement 捕获） ----
+  // ---- 鼠标交互 ----
   useEffect(() => {
     const domElement = gl.domElement
 
@@ -257,15 +239,9 @@ export default function useFlightControls() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       if (e.deltaY < 0) {
-        speedMultiplier.current = Math.min(
-          100,
-          speedMultiplier.current * SCROLL_FACTOR,
-        )
+        speedMultiplier.current = Math.min(100, speedMultiplier.current * SCROLL_FACTOR)
       } else {
-        speedMultiplier.current = Math.max(
-          1,
-          speedMultiplier.current / SCROLL_FACTOR,
-        )
+        speedMultiplier.current = Math.max(1, speedMultiplier.current / SCROLL_FACTOR)
       }
     }
 
@@ -282,26 +258,92 @@ export default function useFlightControls() {
     }
   }, [gl])
 
-  // ---- 初始化：同步灵敏度到 store（解决 UI 显示默认值问题） ----
+  // ---- 触控手势（移动端） ----
+  useEffect(() => {
+    const domElement = gl.domElement
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        const t = e.touches[0]
+        touchStartRef.current = { x: t.clientX, y: t.clientY, t: performance.now() }
+      }
+      if (e.touches.length === 2) {
+        isPinchingRef.current = true
+        const dx = e.touches[0].clientX - e.touches[1].clientX
+        const dy = e.touches[0].clientY - e.touches[1].clientY
+        prevPinchDistRef.current = Math.sqrt(dx * dx + dy * dy)
+      }
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      // 单指滑动 → 旋转视角
+      if (e.touches.length === 1 && !isFlyingRef.current) {
+        const t = e.touches[0]
+        const dx = t.clientX - touchStartRef.current.x
+        const dy = t.clientY - touchStartRef.current.y
+
+        if (Math.abs(dx) + Math.abs(dy) >= 3) {
+          e.preventDefault()
+          yaw.current -= dx * sensitivityRef.current * 2
+          pitch.current -= dy * sensitivityRef.current * 2
+          pitch.current = Math.max(
+            -85 * (Math.PI / 180),
+            Math.min(85 * (Math.PI / 180), pitch.current),
+          )
+        }
+        touchStartRef.current = { x: t.clientX, y: t.clientY, t: touchStartRef.current.t }
+      }
+
+      // 双指捏合 → 前后飞行
+      if (e.touches.length === 2) {
+        e.preventDefault()
+        const dx = e.touches[0].clientX - e.touches[1].clientX
+        const dy = e.touches[0].clientY - e.touches[1].clientY
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        const deltaDist = prevPinchDistRef.current - dist
+        prevPinchDistRef.current = dist
+
+        // 沿当前朝向移动相机（捏合后退，扩张前进）
+        position.current.addScaledVector(direction.current, deltaDist * 0.5)
+      }
+    }
+
+    const onTouchEnd = (_e: TouchEvent) => {
+      if (_e.touches.length === 0) {
+        isPinchingRef.current = false
+      }
+      if (_e.touches.length < 2) {
+        isPinchingRef.current = false
+      }
+    }
+
+    domElement.addEventListener('touchstart', onTouchStart, { passive: true })
+    domElement.addEventListener('touchmove', onTouchMove, { passive: false })
+    domElement.addEventListener('touchend', onTouchEnd, { passive: true })
+
+    return () => {
+      domElement.removeEventListener('touchstart', onTouchStart)
+      domElement.removeEventListener('touchmove', onTouchMove)
+      domElement.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [gl])
+
+  // ---- 初始化 ----
   useEffect(() => {
     setCameraSensitivity(sensitivityRef.current)
   }, [setCameraSensitivity])
 
-  // ---- 初始化方向 ----
   useEffect(() => {
     updateDirection()
   }, [])
 
   // ---- 每帧更新（自由飞行） ----
   useFrame((state, delta) => {
-    // GSAP 飞行动画期间完全暂停
     if (isFlyingRef.current) return
 
-    // 飞行音效已禁用（保留 audio.ts 中的函数定义以备后用）
     const cam = state.camera
     const dt = Math.min(delta, 0.1)
 
-    // 键盘 → 加速度
     if (keys.current['w']) {
       velocity.current.addScaledVector(direction.current, ACCELERATION * dt)
     }
@@ -315,7 +357,6 @@ export default function useFlightControls() {
       velocity.current.addScaledVector(right.current, ACCELERATION * dt)
     }
 
-    // 摩擦力
     velocity.current.multiplyScalar(1 - FRICTION)
 
     const speed = velocity.current.length()
@@ -323,17 +364,13 @@ export default function useFlightControls() {
       velocity.current.set(0, 0, 0)
     }
 
-    // 更新位置
     position.current.addScaledVector(velocity.current, dt * speedMultiplier.current)
 
-    // 更新方向 + 应用相机
     updateDirection()
     applyCamera(cam)
 
-    // 通知 R3F
     state.invalidate()
 
-    // HUD
     setFlightInfo(speed * speedMultiplier.current, speedMultiplier.current)
   })
 }
