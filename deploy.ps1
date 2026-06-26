@@ -1,3 +1,13 @@
+<#
+.SYNOPSIS
+  星辞 (StarLit) 手动部署脚本（备用）
+
+.DESCRIPTION
+  ⚠️ 日常更新请使用 release.ps1 (自动发布 + GitHub Actions CI/CD)
+  此脚本仅在 Actions 异常时作为手动部署后备方案使用。
+  用法: .\deploy.ps1
+#>
+
 Set-Location H:\StarLit
 
 # 清理之前的分支
@@ -23,5 +33,4 @@ try {
 git push origin gh-pages --force
 Set-Location ..
 
-Write-Host "部署完成"
-Write-Host "请在 GitHub Pages 设置中将 Branch 切换为 gh-pages → / (root)"
+Write-Host "手动部署完成"
