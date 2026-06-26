@@ -8,7 +8,7 @@
 
 ## 项目介绍
 
-星辞是一个纯前端的 3D 天球星图 Web 应用，基于 HYG 星表数据，将超过 10 万颗真实恒星渲染在三维球面空间中。用户可在深空场景中自由飞行探索，点击恒星查看天文数据与多文化典故（中国星官、希腊神话、古埃及天文学等）。
+星辞是一个纯前端的 3D 天球星图 Web 应用，基于 HYG 星表数据，将近 12 万颗真实恒星渲染在三维球面空间中。用户可在深空场景中自由飞行探索，点击恒星查看天文数据与多文化典故（中国星官、希腊神话、古埃及天文学等）。
 
 核心交互：WASD 自由飞行、鼠标拖拽旋转视角、滚轮调节速度、星名/星座实时搜索、恒星悬停预览与点击详情面板。
 
@@ -23,7 +23,7 @@
 
 ## Project Introduction
 
-StarLit is a fully client-side 3D celestial sphere web application. Built on the HYG star catalog, it renders over 100,000 real stars in three-dimensional space. Users can freely navigate the deep-space scene, click on any star to view astronomical data alongside cultural and mythological references spanning Chinese star lore, Greek mythology, and ancient Egyptian astronomy.
+StarLit is a fully client-side 3D celestial sphere web application. Built on the HYG star catalog, it renders nearly 120,000 real stars in three-dimensional space. Users can freely navigate the deep-space scene, click on any star to view astronomical data alongside cultural and mythological references spanning Chinese star lore, Greek mythology, and ancient Egyptian astronomy.
 
 Core interactions: WASD free-flight, drag-to-rotate, scroll-wheel speed control, real-time star/constellation search, hover preview, and click-to-inspect detail panel.
 
