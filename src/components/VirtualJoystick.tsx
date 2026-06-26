@@ -2,8 +2,6 @@ import { useRef, useCallback, useEffect } from 'react'
 import { joystickInput } from '../utils/joystickInput'
 import styles from './VirtualJoystick.module.css'
 
-/** 摇杆底座半径（像素） */
-const BASE_RADIUS = 50
 /** 摇杆拇指最大偏移半径 */
 const THUMB_RADIUS = 30
 
