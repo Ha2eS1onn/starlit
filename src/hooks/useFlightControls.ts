@@ -63,9 +63,6 @@ export default function useFlightControls() {
   const prevPinchDistRef = useRef(0)
   /** 是否正在双指触控（供外部跳过星点检测） */
   const isPinchingRef = useRef(false)
-  /** 触控惯性速度（弧度/秒） */
-  const touchInertia = useRef({ yaw: 0, pitch: 0 })
-  const lastTouchTime = useRef(0)
 
   // ---- 计算方向向量 ----
   const updateDirection = () => {
@@ -272,12 +269,9 @@ export default function useFlightControls() {
       if (e.touches.length === 1) {
         const t = e.touches[0]
         prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
-        lastTouchTime.current = performance.now()
-        touchInertia.current = { yaw: 0, pitch: 0 }
       }
       if (e.touches.length === 2) {
         isPinchingRef.current = true
-        touchInertia.current = { yaw: 0, pitch: 0 }
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
         prevPinchDistRef.current = Math.sqrt(dx * dx + dy * dy)
@@ -293,14 +287,6 @@ export default function useFlightControls() {
         const dy = t.clientY - prevTouchPosRef.current.y
 
         if (Math.abs(dx) + Math.abs(dy) >= 1) {
-          const now = performance.now()
-          const dt = Math.max(now - lastTouchTime.current, 1) / 1000
-          lastTouchTime.current = now
-          // 计算瞬时速度用于惯性
-          touchInertia.current = {
-            yaw: -dx * TOUCH_SENSITIVITY / dt,
-            pitch: -dy * TOUCH_SENSITIVITY / dt,
-          }
           yaw.current -= dx * TOUCH_SENSITIVITY
           pitch.current -= dy * TOUCH_SENSITIVITY
           pitch.current = Math.max(
@@ -322,7 +308,8 @@ export default function useFlightControls() {
 
         // 钳制单帧最大变化，防止手指抬起/放下时的突变
         const clampedDelta = Math.max(-50, Math.min(50, rawDelta))
-        position.current.addScaledVector(direction.current, clampedDelta * 0.08)
+        // 取反：捏合（dist 变小，rawDelta > 0）= 后退
+        position.current.addScaledVector(direction.current, -clampedDelta * 0.08)
       }
     }
 
@@ -383,20 +370,6 @@ export default function useFlightControls() {
     }
 
     position.current.addScaledVector(velocity.current, dt * speedMultiplier.current)
-
-    // 触控惯性：在 useFrame 中逐帧衰减，产生平滑滑动跟随感
-    const inertia = touchInertia.current
-    if (Math.abs(inertia.yaw) > 0.001 || Math.abs(inertia.pitch) > 0.001) {
-      yaw.current += inertia.yaw * dt
-      pitch.current += inertia.pitch * dt
-      pitch.current = Math.max(
-        -85 * (Math.PI / 180),
-        Math.min(85 * (Math.PI / 180), pitch.current),
-      )
-      // 惯性逐帧衰减
-      inertia.yaw *= 0.85
-      inertia.pitch *= 0.85
-    }
 
     updateDirection()
     applyCamera(cam)
