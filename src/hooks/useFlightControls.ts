@@ -7,8 +7,8 @@ import { useStarStore } from '../store/useStarStore'
 /** 固定观察距离：相机停在星点前方 FOCUS_DISTANCE 单位处 */
 const FOCUS_DISTANCE = 6
 
-/** 触控灵敏度倍率（远高于鼠标，因手指滑动精度低） */
-const TOUCH_SENSITIVITY = 0.018
+/** 触控灵敏度倍率（略高于鼠标，兼顾精度与跟手感） */
+const TOUCH_SENSITIVITY = 0.01
 
 /** 自定义 Hook：诗云式自由飞行相机控制（支持鼠标 + 触控） */
 export default function useFlightControls() {
@@ -311,16 +311,18 @@ export default function useFlightControls() {
         prevTouchPosRef.current = { x: t.clientX, y: t.clientY }
       }
 
-      // 双指捏合 → 前后飞行
+      // 双指捏合 → 前后飞行（低系数 + 钳制防跳跃）
       if (e.touches.length === 2) {
         e.preventDefault()
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
         const dist = Math.sqrt(dx * dx + dy * dy)
-        const deltaDist = prevPinchDistRef.current - dist
+        const rawDelta = prevPinchDistRef.current - dist
         prevPinchDistRef.current = dist
 
-        position.current.addScaledVector(direction.current, deltaDist * 0.5)
+        // 钳制单帧最大变化，防止手指抬起/放下时的突变
+        const clampedDelta = Math.max(-50, Math.min(50, rawDelta))
+        position.current.addScaledVector(direction.current, clampedDelta * 0.08)
       }
     }
 
