@@ -4,18 +4,15 @@
 
 .DESCRIPTION
   自动完成版本升级、提交、打 tag、推送，触发 GitHub Actions 构建部署。
-  用法: .\release.ps1 -m "提交信息" [-v patch|minor|major]
+  用法: .\release.ps1 [-v patch|minor|major]
 
   示例:
-    .\release.ps1 -m "fix: 修复星点闪烁异常"
-    .\release.ps1 -m "feat: 新增语音播报" -v minor
-    .\release.ps1 -m "重构: 替换渲染引擎" -v major
+    .\release.ps1
+    .\release.ps1 -v minor
+    .\release.ps1 -v major
 #>
 
 param(
-  [Parameter(Mandatory = $true)]
-  [string]$m,
-
   [ValidateSet('patch', 'minor', 'major')]
   [string]$v = 'patch'
 )
@@ -38,15 +35,32 @@ if (-not $status) {
 Write-Host "`n📋 检测到以下更改:" -ForegroundColor Cyan
 git status --short
 
-# ---- 2. 确认 ----
-Write-Host "`n🚀 即将发布 v$v，提交信息: '$m'" -ForegroundColor Cyan
+# ---- 2. 输入提交信息 ----
+Write-Host "`n📝 请输入更新说明（多行以空行结束，单行直接回车）:" -ForegroundColor Cyan
+$lines = @()
+while ($true) {
+  $line = Read-Host
+  if (-not $line) { break }
+  $lines += $line
+}
+$m = $lines -join "`n"
+if (-not $m) {
+  Write-Host "❌ 提交信息不能为空" -ForegroundColor Red
+  exit 1
+}
+
+Write-Host "`n📋 更新说明:" -ForegroundColor Cyan
+$lines | ForEach-Object { Write-Host "  $_" }
+
+# ---- 3. 确认 ----
+Write-Host "`n🚀 即将发布 v$v" -ForegroundColor Cyan
 $confirm = Read-Host "是否继续？(Y/n)"
 if ($confirm -ne '' -and $confirm -ne 'Y' -and $confirm -ne 'y') {
   Write-Host "已取消" -ForegroundColor Yellow
   exit 0
 }
 
-# ---- 3. 自动升版本号（先 pull 确保最新，避免 tag 冲突） ----
+# ---- 4. 自动升版本号（先 pull 确保最新，避免 tag 冲突） ----
 try {
   git pull origin main --no-rebase 2>$null
 } catch {
@@ -58,20 +72,20 @@ $newVersion = npm version $v --no-git-tag-version
 git add package.json package-lock.json
 Write-Host "   → 新版本: $newVersion" -ForegroundColor Green
 
-# ---- 4. 提交 ----
+# ---- 5. 提交 ----
 git add -A
 git commit -m "$m`n`nCo-authored-by: starlit-bot <bot@starlit.app>"
 Write-Host "✅ 提交成功: $m" -ForegroundColor Green
 
-# ---- 5. 打 tag 归档 ----
+# ---- 6. 打 tag 归档 ----
 git tag "$newVersion"
 Write-Host "🏷️ 归档标记: $newVersion" -ForegroundColor Green
 
-# ---- 6. 推送（触发 GitHub Actions 自动部署） ----
+# ---- 7. 推送（触发 GitHub Actions 自动部署） ----
 Write-Host "`n⬆️ 推送到 GitHub..." -ForegroundColor Green
 git push origin main --tags
 
-# ---- 7. 输出结果 ----
+# ---- 8. 输出结果 ----
 $commitHash = git rev-parse --short HEAD
 Write-Host "`n✅ 发布完成!" -ForegroundColor Green
 Write-Host "   版本: $newVersion" -ForegroundColor Green
