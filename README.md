@@ -88,4 +88,4 @@ src/
 
 ## License
 
-MIT
+[WTFPL](LICENSE) — Do What The Fuck You Want To Public License

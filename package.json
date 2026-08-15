@@ -1,6 +1,7 @@
 {
   "name": "starlit",
   "private": true,
+  "license": "WTFPL",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
