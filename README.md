@@ -1,5 +1,12 @@
 # 星辞 / StarLit
 
+> ⚠️ **项目已停止维护 / This project is no longer maintained.**
+>
+> 本仓库已停止更新，代码以现状（as-is）保留，不再接受新功能、修复或 Issue 处理。
+> 感谢所有使用与关注 StarLit 的朋友。
+>
+> This repository is archived in spirit: no further updates, features, fixes, or issue triage will be provided. The code remains available as-is. Thank you to everyone who used and followed StarLit.
+
 沉浸式 3D 天球星图 · 将天文数据与人文典故映射至真实恒星三维空间
 
 > https://starlit.xn--r8q546c.top
